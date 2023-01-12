@@ -14,7 +14,7 @@ def test_get_user():
     ]
 
 
-def tes0t_post_user():
+def test_post_user():
     new_user = {
         "name": "string",
         "email": "string",
