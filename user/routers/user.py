@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List
 from sqlalchemy.orm import Session
 from shared.dependencies import get_db
 from user.models.get_user import UserResponseModel
 from datetime import datetime
-from infra.providers import hash_provider
-
+from infra.providers import hash_provider, token_provider, auth_utils
 
 router = APIRouter(prefix="/user")
 
@@ -36,6 +35,10 @@ class LoginData(OurBaseModel):
     email: str
     password: str
 
+class LoginOK(OurBaseModel):
+    user: UserRequest
+    access_token: str
+
 
 @router.get("", response_model=List[UserResponse], tags=["User"], status_code=200)
 def get_user(db: Session = Depends(get_db)) -> List[UserResponse]:
@@ -51,7 +54,6 @@ def get_user_by_id(user_by_id: int,
 @router.post("", response_model=UserResponse, tags=["User"], status_code=201)
 def post_user(user_request: UserRequest,
               db: Session = Depends(get_db)) -> UserResponse:
-
     # Check Email
     if search_user_by_email(user_request.email, db).email == user_request.email:
         raise HTTPException(status_code=409, detail="Email already exists")
@@ -107,12 +109,29 @@ def delete_user(id: int,
 
 # Auth
 
-"""@router.post("/login", tags=["Auth"], status_code=201)
+@router.post("/login", tags=["Auth"], status_code=201)
 def auth_user(login_data: LoginData, db: Session = Depends(get_db)):
     password = login_data.password
-    email = LoginData.email
+    email = login_data.email
 
-    user = search_user_by_id(email, db)"""
+    user = search_user_by_email(email, db)
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+
+    validate_password = hash_provider.check_hash(password, user.password)
+
+    if not validate_password:
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+
+    # Token JWT
+    token = token_provider.new_access_token({'sub': user.email})
+    return LoginOK(user=user, access_token=token)
+
+
+@router.get('/me', response_model=UserRequest)
+def me(user: UserResponseModel = Depends(auth_utils.get_log_user)):
+    return user
 
 
 def search_user_by_email(email: str, db) -> UserResponseModel:

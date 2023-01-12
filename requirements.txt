@@ -15,3 +15,13 @@ alembic==1.9.1
 # Token
 bcrypt==4.0.1
 passlib==1.7.4
+cryptography==39.0.0
+ecdsa==0.18.0
+pyasn1==0.4.8
+python-jose==3.3.0
+rsa==4.9
+
+httpcore==0.16.3
+httpx==0.23.3
+rfc3986==1.5.0
+
