@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from shared.dependencies import get_db
 from user.models.get_user import UserResponseModel
 from datetime import datetime
+from infra.providers import hash_provider
 
 router = APIRouter(prefix="/user")
 
@@ -30,6 +31,11 @@ class UserRequest(OurBaseModel):
     password: str
 
 
+class LoginData(OurBaseModel):
+    email: str
+    password: str
+
+
 @router.get("", response_model=List[UserResponse], tags=["User"], status_code=200)
 def get_user(db: Session = Depends(get_db)) -> List[UserResponse]:
     return db.query(UserResponseModel).all()
@@ -44,9 +50,16 @@ def get_user_by_id(user_by_id: int,
 @router.post("", response_model=UserResponse, tags=["User"], status_code=201)
 def post_user(user_request: UserRequest,
               db: Session = Depends(get_db)) -> UserResponse:
+    # Check
+    if search_user_by_email(user_request.email, db) is True:
+        raise HTTPException(status_code=409, detail="User already exists")
+
+    # New User
+    user_request.password = hash_provider.generate_hash(user_request.password)
+
     user = UserResponseModel(
-        **user_request.dict()
-    )
+        name=user_request.email, email=user_request.email, birth_date=user_request.birth_date,
+        password=user_request.password)
 
     db.add(user)
     db.commit()
@@ -82,6 +95,25 @@ def delete_user(id: int,
 
     db.delete(user)
     db.commit()
+
+
+# Auth
+
+"""@router.post("/login", tags=["Auth"], status_code=201)
+def auth_user(login_data: LoginData, db: Session = Depends(get_db)):
+    password = login_data.password
+    email = LoginData.email
+
+    user = search_user_by_id(email, db)"""
+
+
+def search_user_by_email(email: str, db: Session) -> UserResponseModel:
+    user = db.query(UserResponseModel).filter(UserResponseModel.email.contains(email))
+
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
 
 
 def search_user_by_id(user_by_id: int, db: Session) -> UserResponseModel:

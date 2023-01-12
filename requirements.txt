@@ -11,3 +11,7 @@ pytest==6.1.1
 
 # Tools
 alembic==1.9.1
+
+# Token
+bcrypt==4.0.1
+passlib==1.7.4

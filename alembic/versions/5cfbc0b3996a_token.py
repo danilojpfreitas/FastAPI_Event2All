@@ -1,8 +1,8 @@
-"""02
+"""token
 
-Revision ID: 925c7178df53
-Revises: 
-Create Date: 2023-01-12 10:01:00.687400
+Revision ID: 5cfbc0b3996a
+Revises: dbb17043d211
+Create Date: 2023-01-12 13:07:57.286616
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '925c7178df53'
-down_revision = None
+revision = '5cfbc0b3996a'
+down_revision = 'dbb17043d211'
 branch_labels = None
 depends_on = None
 
@@ -22,7 +22,10 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=30), nullable=True),
     sa.Column('email', sa.String(length=30), nullable=True),
-    sa.Column('password', sa.String(length=20), nullable=True),
+    sa.Column('birth_date', sa.String(length=8), nullable=True),
+    sa.Column('password', sa.String(length=100), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

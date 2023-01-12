@@ -11,7 +11,7 @@ class UserResponseModel(Base):
     name = Column(String(30))
     email = Column(String(30))
     birth_date = Column(String(8))
-    password = Column(String(20))
+    password = Column(String(100))
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=datetime.datetime.now)
 #    createdAt = Column(TIMESTAMP, nullable=False, server_default=func.now())
