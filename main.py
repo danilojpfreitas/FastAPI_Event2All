@@ -7,12 +7,12 @@ from user.routers import user
 
 from user.models.get_user import UserResponseModel
 
-Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)
+# Base.metadata.drop_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/", tags=["Test"])
 def home() -> str:
     return "Minha api esta no ar"
 
