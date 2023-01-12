@@ -14,7 +14,7 @@ app = FastAPI()
 
 @app.get("/", tags=["Test"])
 def home() -> str:
-    return "Minha api esta no ar"
+    return "API Running"
 
 app.include_router(user.router)
 
