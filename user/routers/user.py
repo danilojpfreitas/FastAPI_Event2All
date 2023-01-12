@@ -54,7 +54,7 @@ def post_user(user_request: UserRequest,
 
     # Check Email
     if search_user_by_email(user_request.email, db).email == user_request.email:
-        raise HTTPException(status_code=409, detail="User already exists")
+        raise HTTPException(status_code=409, detail="Email already exists")
 
     # New User
     user_request.password = hash_provider.generate_hash(user_request.password)
