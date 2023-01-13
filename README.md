@@ -23,7 +23,7 @@ Pré-requisitos: Python(3.9) e Docker/Postgres.
 
 ## :page_with_curl: Documentação
 
-A documentação da API desenvolvida até o momento encontra-se em `https://event2all-api-2-ezjia6ekrq-uc.a.run.app/docs`
+A documentação da API desenvolvida até o momento encontra-se em: `https://event2all-api-2-ezjia6ekrq-uc.a.run.app/docs`
 
 
 ---
