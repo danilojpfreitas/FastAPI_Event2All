@@ -21,6 +21,8 @@ if config.config_file_name is not None:
 
 # noinspection PyUnresolvedReferences
 from user.models.get_user import UserResponseModel
+# noinspection PyUnresolvedReferences
+from event.models.event_model import EventModel
 
 from shared.database import Base
 target_metadata = Base.metadata

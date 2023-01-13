@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
-from typing import List
+from pydantic import BaseModel, BaseConfig
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from shared.dependencies import get_db
 from user.models.get_user import UserResponseModel
 from datetime import datetime
 from infra.providers import hash_provider, token_provider, auth_utils
+from event.models.event_model import EventModel
+
+BaseConfig.arbitrary_types_allowed = True
 
 router = APIRouter(prefix="/user")
 
@@ -35,6 +38,7 @@ class LoginData(OurBaseModel):
     email: str
     password: str
 
+
 class LoginOK(OurBaseModel):
     user: UserRequest
     access_token: str
@@ -55,7 +59,7 @@ def get_user_by_id(user_by_id: int,
 def post_user(user_request: UserRequest,
               db: Session = Depends(get_db)) -> UserResponse:
     # Check Email
-    if search_user_by_email(user_request.email, db).email == user_request.email:
+    if check_email(user_request.email, db) is not None:
         raise HTTPException(status_code=409, detail="Email already exists")
 
     # New User
@@ -76,16 +80,12 @@ def post_user(user_request: UserRequest,
 def put_user(id: int,
              user_request: UserRequest,
              db: Session = Depends(get_db)) -> UserResponse:
-    user = search_user_by_id(id, db)
-
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
 
     # Check Email
-    if search_user_by_email(user_request.email, db).email == user_request.email:
-        user.email
-    elif search_user_by_email(user_request.email, db) is True:
-        raise HTTPException(status_code=409, detail="User already exists")
+    if check_email(user_request.email, db) is not None:
+        raise HTTPException(status_code=409, detail="Email already exists")
+
+    user = search_user_by_id(id, db)
 
     user.name = user_request.name
     user.email = user_request.email
@@ -129,15 +129,21 @@ def auth_user(login_data: LoginData, db: Session = Depends(get_db)):
     return LoginOK(user=user, access_token=token)
 
 
-@router.get('/me', response_model=UserRequest)
-def me(user: UserResponseModel = Depends(auth_utils.get_log_user)):
+# @router.get('/me', response_model=UserRequest)
+# def me(user: UserResponseModel = Depends(auth_utils.get_log_user)):
+#    return user
+
+
+def check_email(email: str, db) -> UserResponseModel:
+    user = db.query(UserResponseModel).filter(
+        UserResponseModel.email == email
+    ).first()
+
     return user
 
 
 def search_user_by_email(email: str, db) -> UserResponseModel:
-    user = db.query(UserResponseModel).filter(
-        UserResponseModel.email == email
-    ).first()
+    user = check_email(email, db)
 
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
