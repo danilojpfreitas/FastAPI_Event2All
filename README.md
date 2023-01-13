@@ -6,7 +6,7 @@ API em desenvolvimento com FastAPI, os endpoints do projeto Event2All que foram 
 
 Deploy realizado no Google Cloud (Docker -> PostgreSQL e Artifact Registry)
 
-Alguns endpoints já disponíbilizados no google cloud - swagger/fastapi: `https://event2all-api-2-ezjia6ekrq-uc.a.run.app/docs`
+Alguns endpoints já disponíbilizados no Google Cloud - Swagger/FastAPI: `https://event2all-api-2-ezjia6ekrq-uc.a.run.app/docs`
 
 ---
 ## Como usar localmente essa API:
