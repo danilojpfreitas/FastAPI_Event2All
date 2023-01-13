@@ -17,7 +17,7 @@ Pré-requisitos: Python(3.9) e Docker/Postgres.
   3) Realizar as `migrations` (Alembic) com os comando -> `alembic revision -m "01"` + `alembic upgrade head`
   4) Rodar a API pelo arquivo `main.py`
   
-  obs.: Para acessar o swagger do fastapi é necessário acrescentar `.../docs` ao final do https. 
+  Obs.: Para acessar o swagger do fastapi é necessário acrescentar `.../docs` ao final do https. 
   
 ---
 
