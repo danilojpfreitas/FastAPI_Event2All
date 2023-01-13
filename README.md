@@ -14,7 +14,7 @@ Pré-requisitos: Python(3.9) e Docker/Postgres.
 
   1) Após clonar o repositório, instalar todas as dependências -> `dependencies.py`
   2) Iniciar o postgres no docker pelo terminal, exemplo -> `docker run -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres`
-  3) Realizar as `migrations` (Alembic), com os comando -> `alembic revision -m "01"` + `alembic upgrade head`
+  3) Realizar as `migrations` (Alembic) com os comando -> `alembic revision -m "01"` + `alembic upgrade head`
   4) Rodar a API pelo arquivo `main.py`
   
   obs.: Para acessar o swagger do fastapi é necessário acrescentar `.../docs` ao final do https. 
