@@ -10,7 +10,7 @@ Alguns endpoints já disponíbilizados no Google Cloud - Swagger/FastAPI: `https
 
 ---
 ## Como usar localmente essa API:
-Pré-requisitos: Python(3.9), Docker/Postgres.
+Pré-requisitos: Python(3.9) e Docker/Postgres.
 
   1) Após clonar o repositório, instalar todas as dependências -> `dependencies.py`
   2) Iniciar o postgres no docker pelo terminal, exemplo -> `docker run -e POSTGRES_PASSWORD=1234 -d -p 5432:5432 postgres`
