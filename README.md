@@ -2,7 +2,7 @@
 
 ---
 
-API em desenvolvimento com FastAPI, os endpoints do projeto Event2All que foram realizados anteriormente com TypeOrm e estão sendo reconstruídos. 
+API em desenvolvimento com FastAPI, os endpoints do projeto Event2All que foram realizados anteriormente com TypeOrm estão sendo reconstruídos. 
 
 Deploy realizado no Google Cloud (Docker -> PostgreSQL e Artifact Registry)
 
